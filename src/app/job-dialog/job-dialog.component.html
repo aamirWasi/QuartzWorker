@@ -1,0 +1,39 @@
+<h2 mat-dialog-title>Add New Job</h2>
+<mat-dialog-content>
+  <form #jobForm="ngForm">
+    <mat-form-field>
+      <mat-label>Job Name</mat-label>
+      <input matInput [(ngModel)]="jobName" name="jobName" required />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Job Class</mat-label>
+      <mat-select [(ngModel)]="selectedJobClass" name="jobClass" required>
+        <mat-option *ngFor="let job of jobClasses" [value]="job.FullName">
+          {{ job.FullName }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Interval In Seconds</mat-label>
+      <input
+        matInput
+        [(ngModel)]="intervalInSeconds"
+        name="intervalInSeconds"
+        required
+      />
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button
+    mat-button
+    (click)="onSave()"
+    [disabled]="jobForm.invalid"
+    cdkFocusInitial
+  >
+    Save
+  </button>
+</mat-dialog-actions>

@@ -1,0 +1,103 @@
+<div class="quartz-dashboard">
+  <mat-toolbar color="primary">
+    <span>Job Scheduler</span>
+    <span class="spacer"></span>
+    <button mat-icon-button (click)="openDialog()">
+      <mat-icon>add</mat-icon>
+    </button>
+  </mat-toolbar>
+  <table mat-table [dataSource]="jobs" class="mat-elevation-z8">
+    <!-- Job Name Column -->
+    <ng-container matColumnDef="jobName">
+      <th mat-header-cell *matHeaderCellDef>Job Name</th>
+      <td mat-cell *matCellDef="let job">{{ job.JobKey }}</td>
+    </ng-container>
+
+    <!-- Group Name Column -->
+    <ng-container matColumnDef="groupName">
+      <th mat-header-cell *matHeaderCellDef>Group Name</th>
+      <td mat-cell *matCellDef="let job">{{ job.Group }}</td>
+    </ng-container>
+
+    <!-- Trigger Name Column -->
+    <ng-container matColumnDef="triggerName">
+      <th mat-header-cell *matHeaderCellDef>Trigger Name</th>
+      <td mat-cell *matCellDef="let job">{{ job.TriggerKey }}</td>
+    </ng-container>
+
+    <!-- Trigger State Column -->
+    <ng-container matColumnDef="triggerState">
+      <th mat-header-cell *matHeaderCellDef>Trigger State</th>
+      <td mat-cell *matCellDef="let job">{{ job.TriggerState }}</td>
+    </ng-container>
+
+    <!-- Next Fire Time Column -->
+    <ng-container matColumnDef="nextFireTime">
+      <th mat-header-cell *matHeaderCellDef>Next Fire Time</th>
+      <td mat-cell *matCellDef="let job">
+        {{ job.NextFireTime | date : "medium" }}
+      </td>
+    </ng-container>
+
+    <!-- Previous Fire Time Column -->
+    <ng-container matColumnDef="previousFireTime">
+      <th mat-header-cell *matHeaderCellDef>Previous Fire Time</th>
+      <td mat-cell *matCellDef="let job">
+        {{ job.PreviousFireTime | date : "medium" }}
+      </td>
+    </ng-container>
+
+    <!-- Cron Expression Column -->
+    <!-- <ng-container matColumnDef="cronExpressionString">
+      <th mat-header-cell *matHeaderCellDef>Cron Expression</th>
+      <td mat-cell *matCellDef="let job">{{ job.CronExpression }}</td>
+    </ng-container> -->
+
+    <!-- Repeat Interval Column -->
+    <ng-container matColumnDef="repeatInterval">
+      <th mat-header-cell *matHeaderCellDef>Repeat Interval</th>
+      <td mat-cell *matCellDef="let job">
+        {{ getFormattedInterval(job.RepeatInterval) }}
+      </td>
+    </ng-container>
+
+    <!-- Actions Column -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td *matCellDef="let job">
+        <button
+          mat-icon-button
+          [matMenuTriggerFor]="menu"
+          aria-label="Example icon-button with a menu"
+        >
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="deleteJob(job.JobKey)">
+            <mat-icon>delete</mat-icon>
+            <span>Delete</span>
+          </button>
+          <button
+            mat-menu-item
+            (click)="pauseJob(job.JobKey)"
+            [disabled]="job.isPaused"
+          >
+            <mat-icon>pause_presentation</mat-icon>
+            <span>Pause</span>
+          </button>
+          <button
+            mat-menu-item
+            (click)="resumeJob(job.JobKey)"
+            [disabled]="!job.isPaused"
+          >
+            <mat-icon>play_arrow</mat-icon>
+            <span>Resume</span>
+          </button>
+        </mat-menu>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+</div>
